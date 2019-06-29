@@ -1,0 +1,41 @@
+<div class="card">
+  <h5 class="card-header">Historial de Consumos</h5>
+  <div class="card-body">
+
+    <div class="card" *ngFor="let tarjeta of tarjetas">
+      <h5 class="card-header bg-secondary"># Tarjeta {{ tarjeta.numero }}</h5>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6">CCV: {{ tarjeta.ccv }}</div>
+          <div class="col-sm-6">Tipo: {{ tarjeta.tipo }}</div>
+        </div>
+        <br>
+        <h6 class="card-title">Consumos</h6>
+
+        <div *ngIf="tarjeta.consumos.length == 0">
+          La Tarjeta no registra consumos
+        </div>
+        <table *ngIf="tarjeta.consumos.length > 0" class="table table-hover table-dark">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Fecha</th>
+              <th scope="col">Descripción</th>
+              <th scope="col">Monto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let consumo of tarjeta.consumos">
+              <th scope="row">{{ consumo.id }}</th>
+              <td>{{ consumo.fecha | date:'mediumDate' }}</td>
+              <td>{{ consumo.descripcion }}</td>
+              <td>{{ consumo.monto | currency }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+</div>

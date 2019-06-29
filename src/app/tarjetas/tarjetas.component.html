@@ -1,0 +1,46 @@
+<div class="card card bg-white border-success mb-3">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-sm-6">
+        Tarjetas
+      </div>
+      <div class="col-sm-6">
+        <div class="my-2 text-right" style="text-align: right;">
+          <button [routerLink]="['/clientes/' + cliente.id + '/tarjetas/gestionar']" class="btn btn-rounded btn-success" type="button">Añadir tarjeta</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body text-secondary">
+
+    <div class="alert alert-info" *ngIf="cliente?.tarjetas?.length == 0">
+      El cliente no cuenta con tarjetas
+    </div>
+    <table class="table table-bordered table-stripped" *ngIf="cliente?.tarjetas?.length > 0">
+      <thead>
+        <tr>
+          <th>Identificador</th>
+          <th>Número</th>
+          <th>CCV</th>
+          <th>Tipo</th>
+          <th>Administrar</th>
+          <th>Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tarjeta of cliente.tarjetas">
+          <td>{{ tarjeta.id }}</td>
+          <td>{{ tarjeta.numero | numeroTarjetaPipe }}</td>
+          <td>{{ tarjeta.ccv }}</td>
+          <td>{{ tarjeta.tipo }}</td>
+          <td>
+            <button [routerLink]="['/clientes/' + cliente.id + '/tarjetas/gestionar', tarjeta.id]" type="button" name="editar" class="btn btn-primary">Administrar</button>
+          </td>
+          <td>
+            <button (click)="deleteTarjeta(tarjeta.id)" type="button" name="eliminar" class="btn btn-danger">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

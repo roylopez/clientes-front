@@ -1,0 +1,129 @@
+<div class="card card bg-white border-success mb-3">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-sm-6">
+        Consumos
+      </div>
+      <div class="col-sm-6">
+        <div class="my-2 text-right" style="text-align: right;">
+          <button (click)="modalConsumo=true" class="btn btn-rounded btn-success" type="button">Registrar consumo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body text-secondary">
+
+    <div class="alert alert-info" *ngIf="tarjeta?.consumos?.length == 0">
+      La tarjeta no registra consumos
+    </div>
+    <table class="table table-bordered table-stripped" *ngIf="tarjeta?.consumos?.length > 0">
+      <thead>
+        <tr>
+          <th>Identificador</th>
+          <th>Fecha</th>
+          <th>Descripción</th>
+          <th>Monto</th>
+          <th>Editar</th>
+          <th>Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let consumo of tarjeta.consumos">
+          <td>{{ consumo.id }}</td>
+          <td>{{ consumo.fecha | date:'mediumDate' }}</td>
+          <td>{{ consumo.descripcion }}</td>
+          <td>{{ consumo.monto | currency }}</td>
+          <td>
+            <button (click)="seleccionConsumo(consumo)" type="button" name="editar" class="btn btn-primary">Editar</button>
+          </td>
+          <td>
+            <button (click)="deleteConsumo(consumo.id)" type="button" name="eliminar" class="btn btn-danger">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div *ngIf="modalConsumo" class="abrir-modal animacion fadeIn">
+  <ul class="alert alert-danger" *ngIf="errores?.length > 0">
+    <li *ngFor="let error of errores">
+      {{ error }}
+    </li>
+  </ul>
+
+  <div class="modal" tabindex="-1" role="dialog" style="display:block;">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Administrar consumo</h5>
+          <button (click)="closeModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <div class="container">
+
+            <form #consumoForm="ngForm">
+              <div class="form-group row">
+                <label for="fecha" class="col-form-label col-sm-2">Fecha</label>
+                <div class="col-sm-6">
+                  <input type="date" class="form-control" name="fecha" [ngModel]="consumoGestionado.fecha | date:'yyyy-MM-dd'" (ngModelChange)="consumoGestionado.fecha = $event" required #fecha="ngModel">
+                  <div class="alert alert-danger" *ngIf="fecha.invalid && (fecha.dirty || fecha.touched)">
+                    <div *ngIf="fecha.errors.required">
+                      La fecha es requerida
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="descripcion" class="col-form-label col-sm-2">Descripción</label>
+                <div class="col-sm-6">
+                  <input type="text" class="form-control" name="ccv" [(ngModel)]="consumoGestionado.descripcion" required maxlength="100" #descripcion="ngModel">
+                  <div class="alert alert-danger" *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)">
+                    <div *ngIf="descripcion.errors.required">
+                      La descripción es requerida
+                    </div>
+                    <div *ngIf="descripcion.errors.maxlength">
+                      La descripción debe contener como máximo 100 caracteres
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="monto" class="col-form-label col-sm-2">Monto</label>
+                <div class="col-sm-6">
+                  <input type="text" appMycurrency class="form-control" name="tipo" [(ngModel)]="consumoGestionado.monto" required pattern="^[0-9]{0,12}$" #monto="ngModel">
+                  <div class="alert alert-danger" *ngIf="monto.invalid && (monto.dirty || monto.touched)">
+                    <div *ngIf="monto.errors.required">
+                      El monto es requerido
+                    </div>
+                    <div *ngIf="monto.errors.pattern">
+                      El monto puede contener como máximo 12 caracteres
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-sm-6">
+                  <button class="btn btn-primary" role="button" (click)="createConsumo()" *ngIf="!consumoGestionado.id else elseBlock" [disabled]="!consumoForm.form.valid">Registrar</button>
+                  <ng-template #elseBlock>
+                    <button class="btn btn-primary" role="button" (click)="updateConsumo()" [disabled]="!consumoForm.form.valid">Actualizar</button>
+                  </ng-template>
+                </div>
+              </div>
+            </form>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button (click)="closeModal()" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

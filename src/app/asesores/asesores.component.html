@@ -1,0 +1,38 @@
+<div class="card border-success mb-3">
+  <div class="card-header">Asesores</div>
+  <div class="card-body text-primary">
+    <h5 class="card-title">Listado de asesores</h5>
+
+    <div class="my-2 text-left">
+      <button [routerLink]="['/asesores/gestionar']" class="btn btn-rounded btn-success" type="button">Crear Asesor</button>
+    </div>
+
+    <div class="alert alert-info" *ngIf="asesores?.length == 0">
+      No se cuenta con asesores en el sistema
+    </div>
+    <table class="table table-bordered table-stripped" *ngIf="asesores?.length > 0">
+      <thead>
+        <tr>
+          <th>Identificador</th>
+          <th>Nombre</th>
+          <th>Especialidad</th>
+          <th>Editar</th>
+          <th>Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let asesor of asesores">
+          <td>{{ asesor.id }}</td>
+          <td>{{ asesor.nombre }}</td>
+          <td>{{ asesor.especialidad }}</td>
+          <td>
+            <button [routerLink]="['/asesores/gestionar', asesor.id]" type="button" name="editar" class="btn btn-primary">Editar</button>
+          </td>
+          <td>
+            <button (click)="delete(asesor.id)" type="button" name="eliminar" class="btn btn-danger">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
